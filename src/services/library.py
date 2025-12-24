@@ -15,6 +15,9 @@ class Library:
     def __contains__(self, item: Book) -> bool:
         return item in self._books
 
+    def __iter__(self):
+        return iter(self._books)
+
     def append(self, item: Book) -> None:
         self._books.append(item)
 
@@ -59,6 +62,20 @@ class Library:
             if self._books[id].borrowed:
                 return self._books[id]()
         return None
+
+    def switch_book(
+            self,
+            book: Book,
+            new_book: Book,
+    ) -> None:
+        if (not isinstance(book, Book)) or (not isinstance(new_book, Book)):
+            raise TypeError("Book element expected")
+        books = self.find(book.isbn, book.author, book.year)
+        books_id = [self._books.index(book) for book in books]
+        for id in books_id:
+            if book == self._books[id]:
+                self._books[id] = new_book
+        raise KeyError("book not found")
 
     def stat(
             self,
