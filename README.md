@@ -44,6 +44,10 @@ lab-4-collections
 │           __init__.py
 │           
 └───tests
+        conftest.py
+        tests_book.py
+        tests_book_collections.py
+        tests_library.py
         __init__.py
 ```
 
