@@ -71,11 +71,13 @@ class Library:
         if (not isinstance(book, Book)) or (not isinstance(new_book, Book)):
             raise TypeError("Book element expected")
         books = self.find(book.isbn, book.author, book.year)
-        books_id = [self._books.index(book) for book in books]
+        books_id = [self._books.index(i_book) for i_book in books]
         for id in books_id:
             if book == self._books[id]:
                 self._books[id] = new_book
-        raise KeyError("book not found")
+                break
+        else:
+            raise KeyError("book not found")
 
     def stat(
             self,
