@@ -65,51 +65,16 @@ class Magazine(Book):
             genre: str,
             isbn: str,
             borrowed: bool = False,
-            issue: int = 0,
+            issue: int = 1,
     ):
         super().__init__(title, author, year, genre, isbn, borrowed)
         self.issue = issue
 
     def __str__(self) -> str:
-        return f"<<{self.isbn}: {self.author}, {self.title}, {self.year}, {self.issue}: {self.genre}>>"
+        return f"<<{self.isbn}: {self.author}, {self.title}, {self.year}, #{self.issue}: {self.genre}>>"
 
     def __repr__(self) -> str:
         return (f"{self.__class__.__name__}"
                 f"(title={self.title!r}, author={self.author!r}, year={self.year}, "
                 f"genre={self.genre!r}, isbn={self.isbn!r}, "
                 f"borrowed={self.borrowed!r}, issue={self.issue!r})")
-
-
-if __name__ == "__main__":
-    db = DigitalBook(
-        "tittle",
-        "author",
-        2078,
-        "genre",
-        "isbn",
-    )
-    db2 = DigitalBook(
-        "tittle",
-        "author",
-        2078,
-        "genre",
-        "isbn",
-    )
-    print(repr(db))
-    print(str(db))
-
-    mag = Magazine(
-        "tittle",
-        "author",
-        2078,
-        "genre",
-        "isbn",
-    )
-    print(repr(mag))
-    print(str(mag))
-    print(mag())
-    print(mag())
-
-    print(db2 == db)
-    print(db.__dict__)
-    print(db2.__dict__)
