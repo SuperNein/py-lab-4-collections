@@ -1,5 +1,6 @@
-from typing import List, Iterable, Any
+from typing import Iterable, Any, Literal
 
+from src.enums.index import Index
 from src.services.book import Book
 
 
@@ -9,10 +10,13 @@ class BookCollection:
             books = ()
         elif any(not isinstance(book, Book) for book in books):
             raise TypeError("Book elements expected")
-        self.__items: List[Book] = list(books)
+        self.__items: list[Book] = list(books)
 
     def __getitem__(self, key: int | slice):
         return self.__items[key]
+
+    def copy(self) -> BookCollection:
+        return BookCollection(self.__items[:])
 
     def __iter__(self):
         return iter(self.__items)
@@ -33,8 +37,18 @@ class BookCollection:
             raise TypeError(f"Book object expected, {type(item)} given")
         self.__items.remove(item)
 
+    def pop(self, key: int = -1):
+        res = self[key]
+        del self[key]
+        return res
+
     def __delitem__(self, key: int | slice):
         del self.__items[key]
+
+    def __setitem__(self, key: int, value: Book):
+        if not isinstance(value, Book):
+            raise TypeError(f"Book object expected, {type(value)} given")
+        self.__items[key] = value
 
     def __str__(self) -> str:
         return str([str(book) for book in self.__items])
@@ -49,3 +63,51 @@ class BookCollection:
             raise TypeError(f"cannot add {type(other)} to BookCollection")
         self.__items.extend(other.__items)
         return self
+
+
+class IndexDict:
+    def __init__(
+            self,
+            index: Literal[Index.isbn, Index.author, Index.year] = "isbn",
+            books: Iterable[Book] | None = None):
+        if index not in Index:
+            raise TypeError(f"index must be one of {[ind for ind in Index]}")
+        self.index = index
+
+        if books is None:
+            books = ()
+        elif any(not isinstance(book, Book) for book in books):
+            raise TypeError("Book elements expected")
+        self.__items: BookCollection = BookCollection(books)
+
+    def __generate_dict(self) -> dict[str, BookCollection]:
+        """Generate actual dictionary of collection"""
+        res: dict[str, BookCollection] = dict()
+        books = self.__items.copy()
+        while books:
+            book = books.pop()
+            key = getattr(book, self.index)
+            if key not in res:
+                res[key] = BookCollection((book,))
+            else:
+                res[key].append(book)
+        return res
+
+    def __iter__(self):
+        return iter(self.__generate_dict())
+
+    def __len__(self):
+        return len(self.__generate_dict())
+
+    def remove(self, item: Book) -> None:
+        if not isinstance(item, Book):
+            raise TypeError(f"Book object expected, {type(item)} given")
+        self.__items.remove(item)
+
+    def append(self, item: Book) -> None:
+        if not isinstance(item, Book):
+            raise TypeError(f"Book object expected, {type(item)} given")
+        self.__items.append(item)
+
+    def __getitem__(self, key: Any) -> BookCollection:
+        return self.__generate_dict()[key]
