@@ -20,12 +20,18 @@ class Book:
         return self
 
     def __str__(self) -> str:
-        return f"<<{self.isbn}: {self.author}, {self.title}, {self.year}>>"
+        return f"<<{self.isbn}: {self.author}, {self.title}, {self.year}: {self.genre}>>"
 
     def __repr__(self) -> str:
         return (f"{self.__class__.__name__}"
                 f"(title={self.title!r}, author={self.author!r}, year={self.year}, "
                 f"genre={self.genre!r}, isbn={self.isbn!r}, borrowed={self.borrowed!r})")
+
+    def __eq__(self, other: Book) -> bool:
+        return self.__dict__ == other.__dict__
+
+    def __hash__(self):
+        return hash((self.isbn, self.title, self.author))
 
 
 class DigitalBook(Book):
@@ -65,7 +71,7 @@ class Magazine(Book):
         self.issue = issue
 
     def __str__(self) -> str:
-        return super().__str__()[:-2] + (">>" * (not self.issue)) + (f", #{self.issue}>>" * self.issue)
+        return f"<<{self.isbn}: {self.author}, {self.title}, {self.year}, {self.issue}: {self.genre}>>"
 
     def __repr__(self) -> str:
         return (f"{self.__class__.__name__}"
@@ -82,10 +88,15 @@ if __name__ == "__main__":
         "genre",
         "isbn",
     )
+    db2 = DigitalBook(
+        "tittle",
+        "author",
+        2078,
+        "genre",
+        "isbn",
+    )
     print(repr(db))
     print(str(db))
-    print(db())
-    print(db(3))
 
     mag = Magazine(
         "tittle",
@@ -93,9 +104,12 @@ if __name__ == "__main__":
         2078,
         "genre",
         "isbn",
-        issue=1
     )
     print(repr(mag))
     print(str(mag))
     print(mag())
     print(mag())
+
+    print(db2 == db)
+    print(db.__dict__)
+    print(db2.__dict__)
