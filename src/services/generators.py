@@ -30,7 +30,7 @@ def generate_random_book_kwargs() -> dict[str, Any]:
     }
 
 def generate_random_book() -> Book:
-    book_type = choice(BookTypes)
+    book_type = choice([book_type for book_type in BookTypes])
     kwargs = generate_random_book_kwargs()
     if book_type == BookTypes.magazine:
         kwargs["issue"] = randint(cst.MAGAZINE_ISSUE[0], cst.MAGAZINE_ISSUE[1])
