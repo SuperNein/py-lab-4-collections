@@ -114,4 +114,7 @@ class IndexDict:
         self.__items.append(item)
 
     def __getitem__(self, key: Any) -> BookCollection:
-        return self.__generate_dict()[key]
+        d = self.__generate_dict()
+        if key is None:
+            return self.__items.copy()
+        return d.get(key, BookCollection())
