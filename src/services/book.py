@@ -15,9 +15,9 @@ class Book:
         self.isbn = isbn
         self.borrowed = borrowed
 
-    def __call__(self) -> bool:
+    def __call__(self) -> Book:
         self.borrowed = not self.borrowed
-        return self.borrowed
+        return self
 
     def __str__(self) -> str:
         return f"<<{self.isbn}: {self.author}, {self.title}, {self.year}>>"
@@ -40,9 +40,9 @@ class DigitalBook(Book):
         super().__init__(title, author, year, genre, isbn)
         self.readers: int = 0
 
-    def __call__(self, readers_num: int = 1) -> int:
+    def __call__(self, readers_num: int = 1) -> Book:
         self.readers += readers_num
-        return self.readers
+        return self
 
     def __repr__(self) -> str:
         return (f"{self.__class__.__name__}"
