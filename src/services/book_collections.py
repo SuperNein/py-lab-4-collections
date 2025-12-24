@@ -74,11 +74,12 @@ class IndexDict:
             raise TypeError(f"index must be one of {[ind for ind in Index]}")
         self.index = index
 
-        if books is None:
-            books = ()
+        if isinstance(books, BookCollection):
+            self.__items = books
         elif any(not isinstance(book, Book) for book in books):
             raise TypeError("Book elements expected")
-        self.__items: BookCollection = BookCollection(books)
+        else:
+            self.__items = BookCollection(books)
 
     def __generate_dict(self) -> dict[str, BookCollection]:
         """Generate actual dictionary of collection"""
