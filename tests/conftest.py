@@ -8,7 +8,7 @@ def book():
         "author",
         2025,
         "genre",
-        "12345",
+        "111",
     )
 
 @pytest.fixture
@@ -18,7 +18,7 @@ def digital_book():
         "author",
         2025,
         "genre",
-        "12345",
+        "222",
     )
 
 @pytest.fixture
@@ -28,6 +28,6 @@ def magazine():
         "author",
         2025,
         "genre",
-        "12345",
+        "333",
         issue=5
     )
