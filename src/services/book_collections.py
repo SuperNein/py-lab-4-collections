@@ -64,6 +64,9 @@ class BookCollection:
         self.__items.extend(other.__items)
         return self
 
+    def index(self, item: Book) -> int:
+        return self.__items.index(item)
+
 
 class IndexDict:
     def __init__(
